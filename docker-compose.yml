@@ -1,0 +1,159 @@
+name: readest
+
+services:
+  db:
+    image: supabase/postgres:15.8.1.085
+    restart: unless-stopped
+    volumes:
+      - ./docker/volumes/db/roles.sql:/docker-entrypoint-initdb.d/init-scripts/99-roles.sql:Z
+      - ./docker/volumes/db/jwt.sql:/docker-entrypoint-initdb.d/init-scripts/99-jwt.sql:Z
+      - ./docker/volumes/db/init/schema.sql:/docker-entrypoint-initdb.d/init-scripts/100-schema.sql:Z
+      - db-data:/var/lib/postgresql/data
+      - db-config:/etc/postgresql-custom
+    environment:
+      POSTGRES_HOST: /var/run/postgresql
+      PGPORT: ${POSTGRES_PORT:-5432}
+      POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+      PGPASSWORD: ${POSTGRES_PASSWORD:-please-change-this-postgres-password-123456}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-please-change-this-postgres-password-123456}
+      PGDATABASE: ${POSTGRES_DB:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-postgres}
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-token-with-at-least-32-characters}
+      JWT_EXP: ${JWT_EXPIRY:-3600}
+    command:
+      - postgres
+      - -c
+      - config_file=/etc/postgresql/postgresql.conf
+      - -c
+      - log_min_messages=fatal
+
+  kong:
+    image: kong:2.8.1
+    restart: unless-stopped
+    ports:
+      - "${KONG_HTTP_PORT:-8001}:8001/tcp"
+    volumes:
+      - ./docker/volumes/api/kong.yml:/home/kong/temp.yml:ro,z
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: /home/kong/kong.yml
+      KONG_PROXY_LISTEN: 0.0.0.0:8001
+      KONG_ADMIN_LISTEN: "off"
+      KONG_DNS_ORDER: LAST,A,CNAME
+      KONG_PLUGINS: request-transformer,cors,key-auth,acl,basic-auth
+      SUPABASE_ANON_KEY: ${ANON_KEY:-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiJ9.HmbvN-NgnsK1Lbk5e8Dti9SS6SFB384DsIT8QVLwUo8}
+      SUPABASE_SERVICE_KEY: ${SERVICE_ROLE_KEY:-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIn0.ym708-_0SlTjvc0pAK56bXQK2srKAo8RbJfA3czgkFo}
+    entrypoint:
+      - /bin/sh
+      - -c
+      - cp /home/kong/temp.yml /home/kong/kong.yml && /docker-entrypoint.sh kong docker-start
+
+  auth:
+    image: supabase/gotrue:v2.185.0
+    restart: unless-stopped
+    environment:
+      GOTRUE_API_HOST: 0.0.0.0
+      GOTRUE_API_PORT: 9999
+      API_EXTERNAL_URL: ${API_EXTERNAL_URL:-http://localhost:8001}
+      GOTRUE_DB_DRIVER: postgres
+      GOTRUE_DB_DATABASE_URL: postgres://supabase_auth_admin:${POSTGRES_PASSWORD:-please-change-this-postgres-password-123456}@db:${POSTGRES_PORT:-5432}/${POSTGRES_DB:-postgres}
+      GOTRUE_SITE_URL: ${SITE_URL:-http://localhost:2001}
+      GOTRUE_URI_ALLOW_LIST: ${ADDITIONAL_REDIRECT_URLS:-http://localhost:2001/**,http://localhost:8001/**}
+      GOTRUE_DISABLE_SIGNUP: ${DISABLE_SIGNUP:-false}
+      GOTRUE_JWT_ADMIN_ROLES: service_role
+      GOTRUE_JWT_AUD: authenticated
+      GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
+      GOTRUE_JWT_EXP: ${JWT_EXPIRY:-3600}
+      GOTRUE_JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-token-with-at-least-32-characters}
+      GOTRUE_EXTERNAL_EMAIL_ENABLED: ${ENABLE_EMAIL_SIGNUP:-true}
+      GOTRUE_EXTERNAL_ANONYMOUS_USERS_ENABLED: ${ENABLE_ANONYMOUS_USERS:-false}
+      GOTRUE_MAILER_AUTOCONFIRM: ${ENABLE_EMAIL_AUTOCONFIRM:-true}
+      GOTRUE_SMTP_HOST: ${SMTP_HOST:-}
+      GOTRUE_SMTP_PORT: ${SMTP_PORT:-587}
+      GOTRUE_SMTP_USER: ${SMTP_USER:-}
+      GOTRUE_SMTP_PASS: ${SMTP_PASS:-}
+      GOTRUE_SMTP_ADMIN_EMAIL: ${SMTP_ADMIN_EMAIL:-admin@example.com}
+      GOTRUE_SMTP_SENDER_NAME: ${SMTP_SENDER_NAME:-Readest}
+
+  rest:
+    image: postgrest/postgrest:v14.3
+    restart: unless-stopped
+    environment:
+      PGRST_SERVER_PORT: 8002
+      PGRST_DB_URI: postgres://authenticator:${POSTGRES_PASSWORD:-please-change-this-postgres-password-123456}@db:${POSTGRES_PORT:-5432}/${POSTGRES_DB:-postgres}
+      PGRST_DB_SCHEMAS: ${PGRST_DB_SCHEMAS:-public,graphql_public}
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-token-with-at-least-32-characters}
+      PGRST_DB_USE_LEGACY_GUCS: "false"
+      PGRST_APP_SETTINGS_JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-token-with-at-least-32-characters}
+      PGRST_APP_SETTINGS_JWT_EXP: ${JWT_EXPIRY:-3600}
+    ports:
+      - "8002:8002"
+    command: ["postgrest"]
+
+  minio:
+    image: minio/minio
+    restart: unless-stopped
+    ports:
+      - "2002:2002"
+      - "2003:2003"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-please-change-this-minio-password-1234}
+    command: server --address ":2002" --console-address ":2003" /data
+    volumes:
+      - minio-data:/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "mc alias set local http://localhost:2002 $$MINIO_ROOT_USER $$MINIO_ROOT_PASSWORD >/dev/null 2>&1 && mc ready local",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  minio-setup:
+    image: minio/mc
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set myminio http://minio:2002 ${MINIO_ROOT_USER:-minioadmin} ${MINIO_ROOT_PASSWORD:-please-change-this-minio-password-1234} &&
+      mc mb --ignore-existing myminio/${S3_BUCKET_NAME:-readest-files}
+      "
+
+  client:
+    build:
+      context: .
+      target: ${READER_BUILD_TARGET:-development-stage}
+      args:
+        NEXT_PUBLIC_SUPABASE_URL: http://${HOST_IP:-localhost}:8001
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${ANON_KEY:-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiJ9.HmbvN-NgnsK1Lbk5e8Dti9SS6SFB384DsIT8QVLwUo8}
+        NEXT_PUBLIC_APP_PLATFORM: web
+        NEXT_PUBLIC_API_BASE_URL: http://${HOST_IP:-localhost}:2001
+        NEXT_PUBLIC_OBJECT_STORAGE_TYPE: s3
+        NEXT_PUBLIC_STORAGE_FIXED_QUOTA: ${STORAGE_FIXED_QUOTA:-1073741824}
+        NEXT_PUBLIC_TRANSLATION_FIXED_QUOTA: ${TRANSLATION_FIXED_QUOTA:-50000}
+    restart: unless-stopped
+    ports:
+      - "2001:2001"
+    environment:
+      PORT: 2001
+      SUPABASE_URL: http://kong:8001
+      SUPABASE_ANON_KEY: ${ANON_KEY:-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiJ9.HmbvN-NgnsK1Lbk5e8Dti9SS6SFB384DsIT8QVLwUo8}
+      SUPABASE_ADMIN_KEY: ${SERVICE_ROLE_KEY:-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIn0.ym708-_0SlTjvc0pAK56bXQK2srKAo8RbJfA3czgkFo}
+      S3_ENDPOINT: http://${HOST_IP:-localhost}:2002
+      S3_REGION: us-east-1
+      S3_BUCKET_NAME: ${S3_BUCKET_NAME:-readest-files}
+      S3_ACCESS_KEY_ID: ${MINIO_ROOT_USER:-minioadmin}
+      S3_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD:-please-change-this-minio-password-1234}
+    depends_on:
+      - kong
+      - minio
+
+volumes:
+  db-config:
+  db-data:
+  minio-data:

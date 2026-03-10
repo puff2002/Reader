@@ -150,7 +150,7 @@ const BooksGrid: React.FC<BooksGridProps> = ({ bookKeys, onCloseBook, onGoToLibr
                       width: `calc(${contentInsets.left + (showFooter ? 32 : 0)}px)`,
                       height: `calc(100%)`,
                     }}
-                  />
+                    />
                 )}
                 {(showHeader || viewSettings.doubleBorder) && (
                   <div

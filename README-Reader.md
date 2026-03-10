@@ -41,6 +41,235 @@
   </a>
 </div>
 
+## Workspace Quick Start (Docker)
+
+For this workspace, you can start Reader with one command:
+
+```bash
+cd /Users/dr_puff/workspace/work_with_AI/Reader
+./bootstrap.sh
+```
+
+`bootstrap.sh` will:
+
+- create `Reader/.env` from `Reader/.env.example` if missing
+- run `git submodule update --init --recursive`
+- build and start `Reader/docker-compose.yml`
+
+By default this workspace uses `READER_BUILD_TARGET=development-stage` to avoid
+high-memory production builds on local Docker. Set it to
+`production-stage` in `Reader/.env` when you need a production image build.
+
+## Component Index (for maintenance)
+
+This index is for this workspace (`Reader/apps/readest-app/src`) and maps component/file names to locations.
+
+### Route Pages
+
+- `app/page.tsx` -> `Reader/apps/readest-app/src/app/page.tsx`
+- `app/library/page.tsx` -> `Reader/apps/readest-app/src/app/library/page.tsx`
+- `app/reader/page.tsx` -> `Reader/apps/readest-app/src/app/reader/page.tsx`
+- `app/auth/page.tsx` -> `Reader/apps/readest-app/src/app/auth/page.tsx`
+- `app/auth/callback/page.tsx` -> `Reader/apps/readest-app/src/app/auth/callback/page.tsx`
+- `app/auth/recovery/page.tsx` -> `Reader/apps/readest-app/src/app/auth/recovery/page.tsx`
+- `app/auth/update/page.tsx` -> `Reader/apps/readest-app/src/app/auth/update/page.tsx`
+- `app/auth/error/page.tsx` -> `Reader/apps/readest-app/src/app/auth/error/page.tsx`
+- `app/user/page.tsx` -> `Reader/apps/readest-app/src/app/user/page.tsx`
+- `app/user/subscription/success/page.tsx` -> `Reader/apps/readest-app/src/app/user/subscription/success/page.tsx`
+- `app/opds/page.tsx` -> `Reader/apps/readest-app/src/app/opds/page.tsx`
+- `app/offline/page.tsx` -> `Reader/apps/readest-app/src/app/offline/page.tsx`
+- `app/updater/page.tsx` -> `Reader/apps/readest-app/src/app/updater/page.tsx`
+- `pages/_app.tsx` -> `Reader/apps/readest-app/src/pages/_app.tsx`
+- `pages/reader/[ids].tsx` -> `Reader/apps/readest-app/src/pages/reader/[ids].tsx`
+
+### Library Components
+
+- `BookItem` -> `Reader/apps/readest-app/src/app/library/components/BookItem.tsx`
+- `Bookshelf` -> `Reader/apps/readest-app/src/app/library/components/Bookshelf.tsx`
+- `BookshelfItem` -> `Reader/apps/readest-app/src/app/library/components/BookshelfItem.tsx`
+- `GroupHeader` -> `Reader/apps/readest-app/src/app/library/components/GroupHeader.tsx`
+- `GroupItem` -> `Reader/apps/readest-app/src/app/library/components/GroupItem.tsx`
+- `GroupingModal` -> `Reader/apps/readest-app/src/app/library/components/GroupingModal.tsx`
+- `ImportMenu` -> `Reader/apps/readest-app/src/app/library/components/ImportMenu.tsx`
+- `LibraryHeader` -> `Reader/apps/readest-app/src/app/library/components/LibraryHeader.tsx`
+- `MigrateDataWindow` -> `Reader/apps/readest-app/src/app/library/components/MigrateDataWindow.tsx`
+- `OPDSDialog` -> `Reader/apps/readest-app/src/app/library/components/OPDSDialog.tsx`
+- `ReadingProgress` -> `Reader/apps/readest-app/src/app/library/components/ReadingProgress.tsx`
+- `SelectModeActions` -> `Reader/apps/readest-app/src/app/library/components/SelectModeActions.tsx`
+- `SetStatusAlert` -> `Reader/apps/readest-app/src/app/library/components/SetStatusAlert.tsx`
+- `SettingsMenu` -> `Reader/apps/readest-app/src/app/library/components/SettingsMenu.tsx`
+- `StatusBadge` -> `Reader/apps/readest-app/src/app/library/components/StatusBadge.tsx`
+- `TransferQueuePanel` -> `Reader/apps/readest-app/src/app/library/components/TransferQueuePanel.tsx`
+- `ViewMenu` -> `Reader/apps/readest-app/src/app/library/components/ViewMenu.tsx`
+
+### Reader Core Components
+
+- `Reader` -> `Reader/apps/readest-app/src/app/reader/components/Reader.tsx`
+- `ReaderContent` -> `Reader/apps/readest-app/src/app/reader/components/ReaderContent.tsx`
+- `BooksGrid` -> `Reader/apps/readest-app/src/app/reader/components/BooksGrid.tsx`
+- `FoliateViewer` -> `Reader/apps/readest-app/src/app/reader/components/FoliateViewer.tsx`
+- `HeaderBar` -> `Reader/apps/readest-app/src/app/reader/components/HeaderBar.tsx`
+- `FooterBar` -> `Reader/apps/readest-app/src/app/reader/components/footerbar/FooterBar.tsx`
+- `ProgressBar` -> `Reader/apps/readest-app/src/app/reader/components/ProgressBar.tsx`
+- `PageNavigationButtons` -> `Reader/apps/readest-app/src/app/reader/components/PageNavigationButtons.tsx`
+- `SectionInfo` -> `Reader/apps/readest-app/src/app/reader/components/SectionInfo.tsx`
+- `StatusInfo` -> `Reader/apps/readest-app/src/app/reader/components/StatusInfo.tsx`
+- `HintInfo` -> `Reader/apps/readest-app/src/app/reader/components/HintInfo.tsx`
+- `Ribbon` -> `Reader/apps/readest-app/src/app/reader/components/Ribbon.tsx`
+- `DoubleBorder` -> `Reader/apps/readest-app/src/app/reader/components/DoubleBorder.tsx`
+- `ViewMenu` -> `Reader/apps/readest-app/src/app/reader/components/ViewMenu.tsx`
+- `ZoomControls` -> `Reader/apps/readest-app/src/app/reader/components/ZoomControls.tsx`
+- `ReadingRuler` -> `Reader/apps/readest-app/src/app/reader/components/ReadingRuler.tsx`
+- `ImageViewer` -> `Reader/apps/readest-app/src/app/reader/components/ImageViewer.tsx`
+- `TableViewer` -> `Reader/apps/readest-app/src/app/reader/components/TableViewer.tsx`
+- `FootnotePopup` -> `Reader/apps/readest-app/src/app/reader/components/FootnotePopup.tsx`
+- `BookmarkToggler` -> `Reader/apps/readest-app/src/app/reader/components/BookmarkToggler.tsx`
+- `NotebookToggler` -> `Reader/apps/readest-app/src/app/reader/components/NotebookToggler.tsx`
+- `SettingsToggler` -> `Reader/apps/readest-app/src/app/reader/components/SettingsToggler.tsx`
+- `SidebarToggler` -> `Reader/apps/readest-app/src/app/reader/components/SidebarToggler.tsx`
+- `TranslationToggler` -> `Reader/apps/readest-app/src/app/reader/components/TranslationToggler.tsx`
+- `KOSyncSettings` -> `Reader/apps/readest-app/src/app/reader/components/KOSyncSettings.tsx`
+- `KOSyncResolver` -> `Reader/apps/readest-app/src/app/reader/components/KOSyncResolver.tsx`
+- `ReadwiseSettings` -> `Reader/apps/readest-app/src/app/reader/components/ReadwiseSettings.tsx`
+- `ProofreadRules` -> `Reader/apps/readest-app/src/app/reader/components/ProofreadRules.tsx`
+
+### Reader Sidebar Components
+
+- `SideBar` -> `Reader/apps/readest-app/src/app/reader/components/sidebar/SideBar.tsx`
+- `Header` -> `Reader/apps/readest-app/src/app/reader/components/sidebar/Header.tsx`
+- `Content` -> `Reader/apps/readest-app/src/app/reader/components/sidebar/Content.tsx`
+- `ContentNavBar` -> `Reader/apps/readest-app/src/app/reader/components/sidebar/ContentNavBar.tsx`
+- `TabNavigation` -> `Reader/apps/readest-app/src/app/reader/components/sidebar/TabNavigation.tsx`
+- `TOCView` -> `Reader/apps/readest-app/src/app/reader/components/sidebar/TOCView.tsx`
+- `TOCItem` -> `Reader/apps/readest-app/src/app/reader/components/sidebar/TOCItem.tsx`
+- `SearchBar` -> `Reader/apps/readest-app/src/app/reader/components/sidebar/SearchBar.tsx`
+- `SearchOptions` -> `Reader/apps/readest-app/src/app/reader/components/sidebar/SearchOptions.tsx`
+- `SearchResults` -> `Reader/apps/readest-app/src/app/reader/components/sidebar/SearchResults.tsx`
+- `SearchResultsNav` -> `Reader/apps/readest-app/src/app/reader/components/sidebar/SearchResultsNav.tsx`
+- `BookCard` -> `Reader/apps/readest-app/src/app/reader/components/sidebar/BookCard.tsx`
+- `BookMenu` -> `Reader/apps/readest-app/src/app/reader/components/sidebar/BookMenu.tsx`
+- `BooknoteItem` -> `Reader/apps/readest-app/src/app/reader/components/sidebar/BooknoteItem.tsx`
+- `BooknoteView` -> `Reader/apps/readest-app/src/app/reader/components/sidebar/BooknoteView.tsx`
+- `BooknotesNav` -> `Reader/apps/readest-app/src/app/reader/components/sidebar/BooknotesNav.tsx`
+- `ChatHistoryView` -> `Reader/apps/readest-app/src/app/reader/components/sidebar/ChatHistoryView.tsx`
+
+### Reader Annotator Components
+
+- `Annotator` -> `Reader/apps/readest-app/src/app/reader/components/annotator/Annotator.tsx`
+- `AnnotationPopup` -> `Reader/apps/readest-app/src/app/reader/components/annotator/AnnotationPopup.tsx`
+- `AnnotationTools` -> `Reader/apps/readest-app/src/app/reader/components/annotator/AnnotationTools.tsx`
+- `AnnotationToolButton` -> `Reader/apps/readest-app/src/app/reader/components/annotator/AnnotationToolButton.tsx`
+- `AnnotationNotes` -> `Reader/apps/readest-app/src/app/reader/components/annotator/AnnotationNotes.tsx`
+- `AnnotationRangeEditor` -> `Reader/apps/readest-app/src/app/reader/components/annotator/AnnotationRangeEditor.tsx`
+- `HighlightOptions` -> `Reader/apps/readest-app/src/app/reader/components/annotator/HighlightOptions.tsx`
+- `QuickActionMenu` -> `Reader/apps/readest-app/src/app/reader/components/annotator/QuickActionMenu.tsx`
+- `TranslatorPopup` -> `Reader/apps/readest-app/src/app/reader/components/annotator/TranslatorPopup.tsx`
+- `WikipediaPopup` -> `Reader/apps/readest-app/src/app/reader/components/annotator/WikipediaPopup.tsx`
+- `WiktionaryPopup` -> `Reader/apps/readest-app/src/app/reader/components/annotator/WiktionaryPopup.tsx`
+- `ProofreadPopup` -> `Reader/apps/readest-app/src/app/reader/components/annotator/ProofreadPopup.tsx`
+- `MagnifierLoupe` -> `Reader/apps/readest-app/src/app/reader/components/annotator/MagnifierLoupe.tsx`
+- `ExportMarkdownDialog` -> `Reader/apps/readest-app/src/app/reader/components/annotator/ExportMarkdownDialog.tsx`
+
+### Reader Notebook / TTS / RSVP / Paragraph / Footer Components
+
+- `Notebook` -> `Reader/apps/readest-app/src/app/reader/components/notebook/Notebook.tsx`
+- `NotebookTabNavigation` -> `Reader/apps/readest-app/src/app/reader/components/notebook/NotebookTabNavigation.tsx`
+- `NoteEditor` -> `Reader/apps/readest-app/src/app/reader/components/notebook/NoteEditor.tsx`
+- `SearchBar` -> `Reader/apps/readest-app/src/app/reader/components/notebook/SearchBar.tsx`
+- `AIAssistant` -> `Reader/apps/readest-app/src/app/reader/components/notebook/AIAssistant.tsx`
+- `Header` -> `Reader/apps/readest-app/src/app/reader/components/notebook/Header.tsx`
+- `TTSControl` -> `Reader/apps/readest-app/src/app/reader/components/tts/TTSControl.tsx`
+- `TTSPanel` -> `Reader/apps/readest-app/src/app/reader/components/tts/TTSPanel.tsx`
+- `TTSBar` -> `Reader/apps/readest-app/src/app/reader/components/tts/TTSBar.tsx`
+- `TTSIcon` -> `Reader/apps/readest-app/src/app/reader/components/tts/TTSIcon.tsx`
+- `RSVPControl` -> `Reader/apps/readest-app/src/app/reader/components/rsvp/RSVPControl.tsx`
+- `RSVPOverlay` -> `Reader/apps/readest-app/src/app/reader/components/rsvp/RSVPOverlay.tsx`
+- `RSVPStartDialog` -> `Reader/apps/readest-app/src/app/reader/components/rsvp/RSVPStartDialog.tsx`
+- `ParagraphControl` -> `Reader/apps/readest-app/src/app/reader/components/paragraph/ParagraphControl.tsx`
+- `ParagraphBar` -> `Reader/apps/readest-app/src/app/reader/components/paragraph/ParagraphBar.tsx`
+- `ParagraphOverlay` -> `Reader/apps/readest-app/src/app/reader/components/paragraph/ParagraphOverlay.tsx`
+- `ColorPanel` -> `Reader/apps/readest-app/src/app/reader/components/footerbar/ColorPanel.tsx`
+- `DesktopFooterBar` -> `Reader/apps/readest-app/src/app/reader/components/footerbar/DesktopFooterBar.tsx`
+- `FontLayoutPanel` -> `Reader/apps/readest-app/src/app/reader/components/footerbar/FontLayoutPanel.tsx`
+- `MobileFooterBar` -> `Reader/apps/readest-app/src/app/reader/components/footerbar/MobileFooterBar.tsx`
+- `NavigationBar` -> `Reader/apps/readest-app/src/app/reader/components/footerbar/NavigationBar.tsx`
+- `NavigationPanel` -> `Reader/apps/readest-app/src/app/reader/components/footerbar/NavigationPanel.tsx`
+
+### OPDS Components
+
+- `CatelogManager` -> `Reader/apps/readest-app/src/app/opds/components/CatelogManager.tsx`
+- `Navigation` -> `Reader/apps/readest-app/src/app/opds/components/Navigation.tsx`
+- `NavigationCard` -> `Reader/apps/readest-app/src/app/opds/components/NavigationCard.tsx`
+- `FeedView` -> `Reader/apps/readest-app/src/app/opds/components/FeedView.tsx`
+- `PublicationCard` -> `Reader/apps/readest-app/src/app/opds/components/PublicationCard.tsx`
+- `PublicationView` -> `Reader/apps/readest-app/src/app/opds/components/PublicationView.tsx`
+- `SearchView` -> `Reader/apps/readest-app/src/app/opds/components/SearchView.tsx`
+
+### User Components
+
+- `Header` -> `Reader/apps/readest-app/src/app/user/components/Header.tsx`
+- `UserInfo` -> `Reader/apps/readest-app/src/app/user/components/UserInfo.tsx`
+- `UsageStats` -> `Reader/apps/readest-app/src/app/user/components/UsageStats.tsx`
+- `StorageManager` -> `Reader/apps/readest-app/src/app/user/components/StorageManager.tsx`
+- `AccountActions` -> `Reader/apps/readest-app/src/app/user/components/AccountActions.tsx`
+- `Checkout` -> `Reader/apps/readest-app/src/app/user/components/Checkout.tsx`
+- `PlanNavigation` -> `Reader/apps/readest-app/src/app/user/components/PlanNavigation.tsx`
+- `PlanCard` -> `Reader/apps/readest-app/src/app/user/components/PlanCard.tsx`
+- `PlanActionButton` -> `Reader/apps/readest-app/src/app/user/components/PlanActionButton.tsx`
+- `PlanIndicators` -> `Reader/apps/readest-app/src/app/user/components/PlanIndicators.tsx`
+- `PlansComparison` -> `Reader/apps/readest-app/src/app/user/components/PlansComparison.tsx`
+- `PurchaseCallToActions` -> `Reader/apps/readest-app/src/app/user/components/PurchaseCallToActions.tsx`
+
+### Shared Components (`src/components`)
+
+- `AboutWindow` -> `Reader/apps/readest-app/src/components/AboutWindow.tsx`
+- `Alert` -> `Reader/apps/readest-app/src/components/Alert.tsx`
+- `BookCover` -> `Reader/apps/readest-app/src/components/BookCover.tsx`
+- `Button` -> `Reader/apps/readest-app/src/components/Button.tsx`
+- `CachedImage` -> `Reader/apps/readest-app/src/components/CachedImage.tsx`
+- `Dialog` -> `Reader/apps/readest-app/src/components/Dialog.tsx`
+- `DropIndicator` -> `Reader/apps/readest-app/src/components/DropIndicator.tsx`
+- `Dropdown` -> `Reader/apps/readest-app/src/components/Dropdown.tsx`
+- `HighlighterIcon` -> `Reader/apps/readest-app/src/components/HighlighterIcon.tsx`
+- `LegalLinks` -> `Reader/apps/readest-app/src/components/LegalLinks.tsx`
+- `Link` -> `Reader/apps/readest-app/src/components/Link.tsx`
+- `Menu` -> `Reader/apps/readest-app/src/components/Menu.tsx`
+- `MenuItem` -> `Reader/apps/readest-app/src/components/MenuItem.tsx`
+- `ModalPortal` -> `Reader/apps/readest-app/src/components/ModalPortal.tsx`
+- `Overlay` -> `Reader/apps/readest-app/src/components/Overlay.tsx`
+- `Popup` -> `Reader/apps/readest-app/src/components/Popup.tsx`
+- `Providers` -> `Reader/apps/readest-app/src/components/Providers.tsx`
+- `Quota` -> `Reader/apps/readest-app/src/components/Quota.tsx`
+- `Select` -> `Reader/apps/readest-app/src/components/Select.tsx`
+- `Slider` -> `Reader/apps/readest-app/src/components/Slider.tsx`
+- `Spinner` -> `Reader/apps/readest-app/src/components/Spinner.tsx`
+- `SupportLinks` -> `Reader/apps/readest-app/src/components/SupportLinks.tsx`
+- `TextButton` -> `Reader/apps/readest-app/src/components/TextButton.tsx`
+- `TextEditor` -> `Reader/apps/readest-app/src/components/TextEditor.tsx`
+- `Toast` -> `Reader/apps/readest-app/src/components/Toast.tsx`
+- `UpdaterWindow` -> `Reader/apps/readest-app/src/components/UpdaterWindow.tsx`
+- `UserAvatar` -> `Reader/apps/readest-app/src/components/UserAvatar.tsx`
+- `WindowButtons` -> `Reader/apps/readest-app/src/components/WindowButtons.tsx`
+- `assistant/*` -> `Reader/apps/readest-app/src/components/assistant/*.tsx`
+- `command-palette/*` -> `Reader/apps/readest-app/src/components/command-palette/*.tsx`
+- `metadata/*` -> `Reader/apps/readest-app/src/components/metadata/*.tsx`
+- `primitives/*` -> `Reader/apps/readest-app/src/components/primitives/*.tsx`
+- `settings/*` -> `Reader/apps/readest-app/src/components/settings/*.tsx`
+- `settings/color/*` -> `Reader/apps/readest-app/src/components/settings/color/*.tsx`
+
+### Hooks / Store / Context Quick Map
+
+- Reader hooks -> `Reader/apps/readest-app/src/app/reader/hooks/*.ts`
+- Library hooks -> `Reader/apps/readest-app/src/app/library/hooks/*.ts`
+- Reader utils -> `Reader/apps/readest-app/src/app/reader/utils/*.ts`
+- Zustand stores -> `Reader/apps/readest-app/src/store/*.ts`
+- React contexts -> `Reader/apps/readest-app/src/context/*.tsx`
+
+### API Route Handlers (Next App Router)
+
+- API routes -> `Reader/apps/readest-app/src/app/api/**/route.ts`
+- Includes: `ai`, `apple`, `google`, `metadata`, `opds`, `stripe`, `tts`
+
 ## Features
 
 <div align="left">✅ Implemented</div>
